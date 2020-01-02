@@ -1,20 +1,20 @@
-require('dotenv').config();
+require('dotenv').config()
 
-const express = require('express');
-const app = express();
-const mongoose = require('mongoose');
+const express = require('express')
+const app = express()
+const mongoose = require('mongoose')
 
 //connecting to database
-mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true});
+mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true})
 //checking connection
-const db = mongoose.connection;
-db.on('error', (error) => console.error(error));
-db.once('open', () => console.log('Connected to Databse'));
+const db = mongoose.connection
+db.on('error', (error) => console.error(error))
+db.once('open', () => console.log('Connected to Databse'))
 
-app.use(express.json());
+app.use(express.json())
 
-const usersRouter = require('./routes/users');
-app.use('/users', usersRouter);
+const usersRouter = require('./routes/users')
+app.use('/users', usersRouter)
 
 
-module.exports = app;
+module.exports = app

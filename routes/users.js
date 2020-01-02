@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+const mongoose = require('mongoose')
+const bcrypt = require('bcryptjs')
 
 // Getting all
 router.get('/', async (req, res) => {
@@ -19,18 +21,46 @@ router.get('/:id', getUser, (req, res) => {
 
 //Creating one
 router.post('/', async (req, res) => {
-    const user = new User ({
-        userName: req.body.name,
-        userPassword: req.body.password,
-        userEmail: req.body.email
+    User.findOne({userEmail: req.body.userEmail}).exec()
+    .then(user => {
+        console.log(user);
+        if (user) {
+            return res.status(409).json({message: "User already exists"})
+        } else {
+            bcrypt.hash(req.body.userPassword, 10, (err, hash => {
+                if(err){
+                    return res.status(500).json({error: err})
+                } else {
+                    const user = new User ({
+                        _id: new mongoose.Types.ObjectId(),
+                        userName: req.body.name,
+                        userPassword: hash,
+                        userEmail: req.body.email
+                    })
+                    user.save()
+                    .then(user => {
+                        res.status(201).json({
+                            message: "User has been created",
+                            createdUser: user
+                        })
+                    })
+                    .catch(err => {
+                        res.status(500).json({error: err})
+                    })
+                    // try {
+                    //     const newUser = user.save()
+                    //     res.status(201).json(newUser)
+                    // } catch(err) {
+                    //     res.status(400).json(err.message)
+                    // }
+                }
+            }))   
+        }
     })
-
-    try {
-        const newUser = await user.save()
-        res.status(201).json(newUser)
-    } catch(err) {
-        res.status(400).json(err.message)
-    }
+    .catch(err => {
+        res.status(500).json({error: err})
+    })
+    
 })
 // Updating one
 router.patch('/:id', getUser, async (req, res) => {
@@ -52,7 +82,7 @@ router.patch('/:id', getUser, async (req, res) => {
 router.delete('/:id', getUser, async (req, res) => {
     try {
         await res.user.remove()
-        res.json({ message: 'Deleted user' })
+        res.status(200).json({ message: 'Deleted user' })
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
