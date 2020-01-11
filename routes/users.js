@@ -89,6 +89,11 @@ router.delete('/:id', getUser, async (req, res) => {
     }
 })
 
+// Logging in
+
+// In progress
+
+// Function used to find user in database and to pass one to routes
 async function getUser(req, res, next) {
     let user
     try {
