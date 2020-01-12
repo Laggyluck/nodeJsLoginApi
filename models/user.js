@@ -4,7 +4,8 @@ const userSchema = new mongoose.Schema({
     _id: mongoose.Types.ObjectId,
     userName: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     userPassword: {
         type: String,
