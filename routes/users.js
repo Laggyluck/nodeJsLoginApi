@@ -13,7 +13,6 @@ router.get('/:id',middleware.getUser, controllers.userGetOne)
 // Creating one
 router.post('/',controllers.userCreate)
 
-
 // Updating one
 router.patch('/:id', middleware.getUser, controllers.userUpdate)
 

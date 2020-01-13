@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 
 // Function to authenticate user
-module.exports = function authenticateToken(req, res, next) {
+module.exports = function (req, res, next) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     if (token == null) return res.status(401).json({message: "No token"})

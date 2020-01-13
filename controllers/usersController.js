@@ -95,7 +95,8 @@ module.exports.userLogIn = (req, res, next) => {
             }
             if (result) {
                 const token = jwt.sign({
-                    userEmail: user.userEmail
+                    userEmail: user.userEmail,
+                    userName: user.userName
                 }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "1h"})
                 return res.status(200).json({
                     message: "User authorizated",
