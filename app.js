@@ -8,7 +8,7 @@ const usersRouter = require('./routes/users')
 const postsRouter = require('./routes/posts')
 
 //connecting to database
-mongoose.connect("mongodb+srv://admin2:" + process.env.MONGO_PASS + "@test-lvzxm.mongodb.net/test?retryWrites=true&w=majority", 
+mongoose.connect("mongodb+srv://admin2:" + process.env.MONGO_PASSWORD + "@test-lvzxm.mongodb.net/test?retryWrites=true&w=majority", 
 {useNewUrlParser: true, useUnifiedTopology: true})
 //checking connection
 //const db = mongoose.connection
