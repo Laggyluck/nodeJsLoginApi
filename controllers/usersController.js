@@ -102,7 +102,7 @@ module.exports.userLogIn = (req, res, next) => {
                     message: "User authorizated",
                     token: token
                 })
-            }
+            } else
             return res.status(401).json({message: "Authorization error"})
         })
     })
