@@ -23,32 +23,38 @@ module.exports.userGetOne = (middleware.getUser, async (req, res) => {
 module.exports.userCreate = async (req, res, next) => {
     User.findOne({userEmail: req.body.userEmail}).exec()
     .then(user => {
-        console.log(user);
         if (user) {
             return res.status(409).json({message: "User already exists"})
         } else {
-            bcrypt.hash(req.body.userPassword, 10, (err, hash) => {
-                if(err){
-                    return res.status(500).json({error: err})
+            User.findOne({userName: req.body.userName}).exec()
+            .then(user => {
+                if (user) {
+                    return res.status(409).json({message: "User already exists"})
                 } else {
-                    const user = new User ({
-                        _id: new mongoose.Types.ObjectId(),
-                        userName: req.body.userName,
-                        userPassword: hash,
-                        userEmail: req.body.userEmail
-                    })
-                    user.save()
-                    .then(user => {
-                        res.status(201).json({
-                            message: "User has been created",
-                            createdUser: user
-                        })
-                    })
-                    .catch(err => {
-                        res.status(500).json({error: err})
-                    })
+                    bcrypt.hash(req.body.userPassword, 10, (err, hash) => {
+                        if(err){
+                            return res.status(500).json({error: err})
+                        } else {
+                            const user = new User ({
+                                _id: new mongoose.Types.ObjectId(),
+                                userName: req.body.userName,
+                                userPassword: hash,
+                                userEmail: req.body.userEmail
+                            })
+                            user.save()
+                            .then(user => {
+                                res.status(201).json({
+                                    message: "User has been created",
+                                    createdUser: user
+                                })
+                            })
+                            .catch(err => {
+                                res.status(500).json({error: err})
+                            })
+                        }
+                    })   
                 }
-            })   
+            })
         }
     })
     .catch(err => {
